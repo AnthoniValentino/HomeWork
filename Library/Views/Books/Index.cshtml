@@ -1,0 +1,35 @@
+﻿@model List<Library.Helpers.BooksWithAuthors>
+@{
+    ViewBag.Title = "Книги";
+}
+
+<h2>Книги</h2>
+
+<div>
+    <table class="table">
+        @Html.ActionLink("Создать", "CreateOrEdit", "Books")
+        <tr>
+            <th>Наименование</th>
+            <th>Автор</th>
+            <th>Кол-во страниц</th>
+            <th>Стоимость</th>
+            <th></th>
+
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@item.bookTitle</th>
+                <th>@item.authorLastName @item.authorFirstName</th>
+                <th>@item.bookPages</th>
+                <th>@item.bookPrice</th>
+                <th>
+                    @Html.ActionLink("Редактировать", "CreateOrEdit", "Books", new { id = item.bookId }, null)
+                    @Html.ActionLink("Удалить", "Delete", "Books", new { id = item.bookId }, null)
+                </th>
+
+            </tr>
+        }
+    </table>
+</div>

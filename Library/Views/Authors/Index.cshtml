@@ -1,0 +1,32 @@
+﻿@model List<Library.Entities.Authors>
+
+@{
+    ViewBag.Title = "Авторы";
+}
+
+<h2>Авторы</h2>
+
+<div>
+    <table class ="table">
+        @Html.ActionLink("Создать", "EditOrCreate", "Authors")
+        <tr>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th></th>
+            
+        </tr>
+
+        @foreach (var item in Model) 
+        {
+            <tr>
+                <th>@item.firstName</th>
+                <th>@item.lastName</th>
+                <th>
+                    @Html.ActionLink("Редактировать", "EditOrCreate", "Authors",new { id = item.id }, null) 
+                    @Html.ActionLink("Удалить", "Delete", "Authors", new { id = item.id }, null)
+                </th>
+               
+            </tr>
+        }
+    </table>
+</div>
