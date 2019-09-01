@@ -168,6 +168,7 @@
     </Compile>
     <Compile Include="Helpers\BooksWithAuthors.cs" />
     <Compile Include="HTMLHelpers\EditorHelper.cs" />
+    <Compile Include="HTMLHelpers\LabelHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

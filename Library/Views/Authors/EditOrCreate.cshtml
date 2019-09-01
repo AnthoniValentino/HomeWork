@@ -1,5 +1,5 @@
 ﻿@model Library.Entities.Authors
-
+@using Library.HTMLHelpers
 
 
 <h2>@ViewBag.Title</h2>
@@ -15,17 +15,21 @@
         @*@Html.HiddenFor(model => model.id)*@
 
         <div class="form-group">
-            @Html.LabelFor(model => model.firstName, "Имя", htmlAttributes: new { @class = "control-label col-md-2" })
+            @*@Html.LabelFor(model => model.firstName, "Имя", htmlAttributes: new { @class = "control-label col-md-2" })*@
+            @LabelHelper.Create_Lable("Имя", "firstName")
             <div class="col-md-10">
-                @Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.Custom_Editor(model => model.firstName, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.EditorFor(model => model.firstName, new { htmlAttributes = new { @class = "form-control" } })*@
                 @Html.ValidationMessageFor(model => model.firstName, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.lastName, "Фамилия", htmlAttributes: new { @class = "control-label col-md-2" })
+            @LabelHelper.Create_Lable("Фамилия", "lastName")
+            @*@Html.LabelFor(model => model.lastName, "Фамилия", htmlAttributes: new { @class = "control-label col-md-2" })*@
             <div class="col-md-10">
-                @Html.EditorFor(model => model.lastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.Custom_Editor(model => model.lastName, new { htmlAttributes = new { @class = "form-control" } })
+                @*@Html.EditorFor(model => model.lastName, new { htmlAttributes = new { @class = "form-control" } })*@
                 @Html.ValidationMessageFor(model => model.lastName, "", new { @class = "text-danger" })
             </div>
         </div>
