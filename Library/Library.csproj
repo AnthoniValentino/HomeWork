@@ -167,6 +167,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BooksWithAuthors.cs" />
+    <Compile Include="HTMLHelpers\EditorHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -213,7 +214,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="HTMLHelpers\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
