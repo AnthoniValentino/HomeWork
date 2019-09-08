@@ -162,6 +162,7 @@
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Entities\Authors.cs" />
     <Compile Include="Entities\Books.cs" />
+    <Compile Include="Entities\Customers.cs" />
     <Compile Include="Entities\Model1.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -169,6 +170,15 @@
     <Compile Include="Helpers\BooksWithAuthors.cs" />
     <Compile Include="HTMLHelpers\EditorHelper.cs" />
     <Compile Include="HTMLHelpers\LabelHelper.cs" />
+    <Compile Include="Migrations\201909081337242_BaseMigration.cs" />
+    <Compile Include="Migrations\201909081337242_BaseMigration.Designer.cs">
+      <DependentUpon>201909081337242_BaseMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909081340221_AddCustomersTable.cs" />
+    <Compile Include="Migrations\201909081340221_AddCustomersTable.Designer.cs">
+      <DependentUpon>201909081340221_AddCustomersTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +234,14 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201909081337242_BaseMigration.resx">
+      <DependentUpon>201909081337242_BaseMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909081340221_AddCustomersTable.resx">
+      <DependentUpon>201909081340221_AddCustomersTable.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
