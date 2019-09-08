@@ -8,7 +8,7 @@ namespace Library.Entities
     public class Customers
     {
         public int id { get; set; }
-        public string fullName { get; set; }
+        public string fullName { get; set;  }
 
     }
 }
