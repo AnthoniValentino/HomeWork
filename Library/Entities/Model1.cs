@@ -15,7 +15,7 @@ namespace Library.Entities
         public virtual DbSet<Authors> Authors { get; set; }
         public virtual DbSet<Books> Books { get; set; }
         public virtual DbSet<Customers> Customers { get; set; }
-
+        public virtual DbSet<CustomersWithBooks> CustomersWithBooks { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Authors>()

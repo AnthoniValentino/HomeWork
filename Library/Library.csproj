@@ -161,9 +161,11 @@
     <Compile Include="Controllers\AuthorsController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
+    <Compile Include="Controllers\CustomersWithBooksController.cs" />
     <Compile Include="Entities\Authors.cs" />
     <Compile Include="Entities\Books.cs" />
     <Compile Include="Entities\Customers.cs" />
+    <Compile Include="Entities\CustomersWithBooks.cs" />
     <Compile Include="Entities\Model1.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -178,6 +180,10 @@
     <Compile Include="Migrations\201909081340221_AddCustomersTable.cs" />
     <Compile Include="Migrations\201909081340221_AddCustomersTable.Designer.cs">
       <DependentUpon>201909081340221_AddCustomersTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909081417588_AddCustomersWithBooksTable.cs" />
+    <Compile Include="Migrations\201909081417588_AddCustomersWithBooksTable.Designer.cs">
+      <DependentUpon>201909081417588_AddCustomersWithBooksTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -225,6 +231,8 @@
     <Content Include="Views\Books\CreateOrEdit.cshtml" />
     <Content Include="Views\Customers\Index.cshtml" />
     <Content Include="Views\Customers\CreateOrEdit.cshtml" />
+    <Content Include="Views\CustomersWithBooks\Index.cshtml" />
+    <Content Include="Views\CustomersWithBooks\GiveOutBook.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -244,6 +252,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909081340221_AddCustomersTable.resx">
       <DependentUpon>201909081340221_AddCustomersTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909081417588_AddCustomersWithBooksTable.resx">
+      <DependentUpon>201909081417588_AddCustomersWithBooksTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

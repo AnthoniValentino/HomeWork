@@ -1,0 +1,32 @@
+﻿@model List<Library.Entities.CustomersWithBooks>
+@{
+    ViewBag.Title = "Книги у посетителей";
+}
+
+<h2> ViewBag.Title</h2>
+
+<div>
+    <table class="table">
+        @Html.ActionLink("Выдать книгу", "GiveOutBook", "CustomersWithBooks")
+        <tr>
+            <th>Имя/Фамилия</th>
+            <th>Книга</th>
+            <th>Дата выдачи</th>
+
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@item.Customers.fullName</th>
+                <th>@item.Books.title</th>
+                <th>
+                    @Html.ActionLink("Редактировать", "CreateOrEdit", "Customers", new { id = item.Id }, null)
+                    @Html.ActionLink("Удалить", "Delete", "Customers", new { id = item.Id }, null)
+                </th>
+
+            </tr>
+        }
+    </table>
+</div>
+
