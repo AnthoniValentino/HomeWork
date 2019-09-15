@@ -15,7 +15,7 @@ namespace Library.Migrations
                         CustomerId = c.Int(nullable: false),
                         BookId = c.Int(nullable: false),
                         DateCreation = c.DateTime(nullable: false),
-                        ReturnDate = c.DateTime(nullable: false),
+                        ReturnDate = c.DateTime(),
                         Period = c.DateTime(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)

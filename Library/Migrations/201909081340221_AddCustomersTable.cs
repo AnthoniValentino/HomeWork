@@ -10,12 +10,12 @@ namespace Library.Migrations
             CreateTable(
                 "dbo.Customers",
                 c => new
-                    {
-                        id = c.Int(nullable: false, identity: true),
-                        fullName = c.String(),
-                    })
+                {
+                    id = c.Int(nullable: false, identity: true),
+                    fullName = c.String(),
+                })
                 .PrimaryKey(t => t.id);
-            
+
         }
         
         public override void Down()

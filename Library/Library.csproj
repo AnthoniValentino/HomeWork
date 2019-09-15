@@ -171,6 +171,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BooksWithAuthors.cs" />
+    <Compile Include="Helpers\CustomersWithBooksHelper.cs" />
     <Compile Include="HTMLHelpers\EditorHelper.cs" />
     <Compile Include="HTMLHelpers\LabelHelper.cs" />
     <Compile Include="Migrations\201909081337242_BaseMigration.cs" />
@@ -184,6 +185,10 @@
     <Compile Include="Migrations\201909081417588_AddCustomersWithBooksTable.cs" />
     <Compile Include="Migrations\201909081417588_AddCustomersWithBooksTable.Designer.cs">
       <DependentUpon>201909081417588_AddCustomersWithBooksTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909151634278_EnableNullableDateInCustomersWithBooks2.cs" />
+    <Compile Include="Migrations\201909151634278_EnableNullableDateInCustomersWithBooks2.Designer.cs">
+      <DependentUpon>201909151634278_EnableNullableDateInCustomersWithBooks2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -255,6 +260,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909081417588_AddCustomersWithBooksTable.resx">
       <DependentUpon>201909081417588_AddCustomersWithBooksTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909151634278_EnableNullableDateInCustomersWithBooks2.resx">
+      <DependentUpon>201909151634278_EnableNullableDateInCustomersWithBooks2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

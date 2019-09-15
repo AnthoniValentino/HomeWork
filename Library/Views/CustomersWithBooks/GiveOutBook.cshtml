@@ -1,17 +1,15 @@
 ﻿@model Library.Entities.CustomersWithBooks
 
-@{
-    ViewBag.Title = "GiveOutBook";
-}
 
-<h2>GiveOutBook</h2>
+
+<h2> @ViewBag.Title</h2>
 
 @using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>CustomersWithBooks</h4>
+        <h4>Книги у посетителей</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
@@ -33,32 +31,36 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.DateCreation, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.DateCreation, "Дата выдачи", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.DateCreation, new { htmlAttributes = new { @class = "form-control" } })
+             
+                   
+                    @Html.EditorFor(model => model.DateCreation, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.DateCreation  } })
+                
+               
                 @Html.ValidationMessageFor(model => model.DateCreation, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
+        @*<div class="form-group">
             @Html.LabelFor(model => model.ReturnDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.ReturnDate, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ReturnDate, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Period, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Period,"Срок возврата", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Period, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Period, new { htmlAttributes = new { @class = "form-control", @Value = ViewBag.Period } })
                 @Html.ValidationMessageFor(model => model.Period, "", new { @class = "text-danger" })
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value=@ViewBag.Btn class="btn btn-default" />
             </div>
         </div>
     </div>
