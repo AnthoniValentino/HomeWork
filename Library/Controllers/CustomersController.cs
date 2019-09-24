@@ -75,5 +75,20 @@ namespace Library.Controllers
             return RedirectToAction("Index", "Customers");
 
         }
+
+        public ActionResult GiveFiveBooks(int userId)
+        {
+            using (Model1 db = new Model1())
+            {
+
+                ViewBag.FiveBooks = (from cWb in db.CustomersWithBooks
+                                     join b in db.Books on
+                                     cWb.BookId equals b.id
+                                     where cWb.CustomerId == userId
+                                     select  b.title ).Take(5).ToList();
+     }
+        return PartialView("_CustomerFiveBook", ViewBag.FiveBooks);
+        }
+
     }
 }

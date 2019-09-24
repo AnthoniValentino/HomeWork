@@ -1,0 +1,13 @@
+﻿<h2>Пять книг пользователя</h2>
+<table>
+    <tr>
+        <th>Намиенование книги</th>
+        
+    </tr>
+    @foreach (var item in ViewBag.FiveBooks) 
+    {
+        <tr>
+            <td>@item</td>
+       </tr>
+    }
+</table>

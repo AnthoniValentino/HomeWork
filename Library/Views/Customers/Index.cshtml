@@ -7,25 +7,35 @@
 <h2>Посетители</h2>
 
 <div>
-    <table class="table">
+    <table class="table" id="customersTable" >
         @Html.ActionLink("Создать", "CreateOrEdit", "Customers")
-        <tr>
-            <th>Имя/Фамилия</th>
-            <th></th>
-
-        </tr>
-
-        @foreach (var item in Model)
-        {
+        <thead>
             <tr>
-                <th>@item.fullName</th>
-                
-                <th>
-                    @Html.ActionLink("Редактировать", "CreateOrEdit", "Customers", new { id = item.id }, null)
-                    @Html.ActionLink("Удалить", "Delete", "Customers", new { id = item.id }, null)
-                </th>
+                <th>Имя/Фамилия</th>
+                <th></th>
 
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr onclick="GetFiveBooks('@item.id')">
+                    <th>@item.fullName</th>
+
+                    <th>
+                        @Html.ActionLink("Редактировать", "CreateOrEdit", "Customers", new { id = item.id }, null)
+                        @Html.ActionLink("Удалить", "Delete", "Customers", new { id = item.id }, null)
+                    </th>
+
+                </tr>
+            }
+        </tbody>
     </table>
+    <div id="fiveBooks">
+        @*@Html.Partial("_CustomerFiveBook");*@
+    </div>
+    @if (ViewBag.FiveBooks != null)
+        {
+            @*@Html.Partial("_CustomerFiveBook", ViewBag.FiveBooks);*@
+        }
 </div>
