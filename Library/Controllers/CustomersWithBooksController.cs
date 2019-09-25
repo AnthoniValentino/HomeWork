@@ -114,19 +114,14 @@ namespace Library.Controllers
            
 
             StringBuilder sb = new StringBuilder();
-            string header = "#\tUser\tAuthor\tBook\tIssued\tReturn";
+            string header = "\tUser\t|\tAuthor\t|\tBook\t|\tIssued\t|\tReturn date\t|\r\n";
             sb.Append(header);
-            sb.Append("\r\n\r\n");
-            sb.Append('-', header.Length * 2);
-            sb.Append("\r\n\r\n");
-            foreach (var item in debts)
+           foreach (var item in debts)
             {
-                sb.Append((debts.IndexOf(item) + 1) + "\t" + item.fullName + "\t" + item.lastName+item.lastName + "\t" + item.title + "\t" + item.DateCreation +"\t" + item.Period +  "\r\n");
+                sb.Append("\t" + item.fullName + "\t|\t" + item.lastName+item.lastName + "\t|\t" + item.title + "\t|\t" + item.DateCreation.ToString("dd/MM/yyyy") + "\t|\t" + item.Period.ToString("dd/MM/yyyy") +  "\t|\r\n");
             }
             byte[] data = Encoding.ASCII.GetBytes(sb.ToString());
-
-            string contentType = "text/plain";
-                return File(data, contentType, "users.txt");
+            return File(data, "text/plain", "users.txt");
                      }
  
         }
