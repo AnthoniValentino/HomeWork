@@ -87,7 +87,7 @@ namespace Library.Controllers
                                      where cWb.CustomerId == userId
                                      select  b.title ).Take(5).ToList();
      }
-        return PartialView("_CustomerFiveBook", ViewBag.FiveBooks);
+        return PartialView("Partial/_CustomerFiveBook", ViewBag.FiveBooks);
         }
 
     }

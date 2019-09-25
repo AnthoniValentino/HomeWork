@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.IO;
+using System.Text;
 
 namespace Library.Controllers
 {
@@ -44,11 +46,6 @@ namespace Library.Controllers
             else
             {
                     var customerWithBooks = db.CustomersWithBooks.Where(cWB => cWB.Id == id).FirstOrDefault();
-                    //var   customerWithBooks = (from cWB in db.CustomersWithBooks
-                    //                         join c in db.Customers on cWB.CustomerId equals c.id
-                    //                         join b in db.Books on cWB.BookId equals b.id
-                    //                         where cWB.Id == id
-                    //                         select new CustomersWithBooksHelper { id = cWB.Id, bookId = cWB.BookId, bookTitle = b.title, customerId = cWB.CustomerId, customerFullName = c.fullName, dateCreation = cWB.DateCreation, period = cWB.Period, returnDate = cWB.ReturnDate }).FirstOrDefault();
                     ViewBag.Title = "Редактировать заказ";
                     ViewBag.DateCreation = customerWithBooks.DateCreation.ToString("yyyy-MM-dd");
                     ViewBag.Period = customerWithBooks.Period.ToString("yyyy-MM-dd");
@@ -64,10 +61,19 @@ namespace Library.Controllers
             using (Model1 db = new Model1())
             {
                 var editableCustomerWithBook = db.CustomersWithBooks.Where(cWB => cWB.Id == customerWithBook.Id).FirstOrDefault();
-               if (editableCustomerWithBook == null)
-                //{
+                var currentDebt = db.CustomersWithBooks.Where(cWb => cWb.CustomerId == customerWithBook.CustomerId && cWb.Period < DateTime.Now).ToList();
+                var v = db.CustomersWithBooks.Where(cWb => cWb.Id == customerWithBook.Id).ToList();
+                if (currentDebt.Count != 0)
+                {
+                    ModelState.AddModelError("CustomerId", "У пользователя есть просроченные книги, выдача отменена");
+                    int? id = null;
+                    return GiveOutBook(id); 
+                }
+                if (editableCustomerWithBook == null)
+                {
+
                     db.CustomersWithBooks.Add(customerWithBook);
-                //}
+                }
                 else
                 {
                     editableCustomerWithBook.BookId = customerWithBook.BookId;
@@ -91,6 +97,40 @@ namespace Library.Controllers
             }
             return RedirectToAction("Index", "CustomersWithBooks");
         }
+
+        public ActionResult ExportDebtors()
+        {
+            using (Model1 db = new Model1())
+            {
+                var debts = (from cWb in db.CustomersWithBooks
+                             join c in db.Customers on
+                             cWb.CustomerId equals c.id
+                             join b in db.Books on
+                             cWb.BookId equals b.id
+                             join a in db.Authors on
+                             b.authorId equals a.id
+                             where cWb.Period < DateTime.Now
+                             select new { c.fullName, b.title, a.firstName, a.lastName, cWb.DateCreation, cWb.Period }).ToList();
+           
+
+            StringBuilder sb = new StringBuilder();
+            string header = "#\tUser\tAuthor\tBook\tIssued\tReturn";
+            sb.Append(header);
+            sb.Append("\r\n\r\n");
+            sb.Append('-', header.Length * 2);
+            sb.Append("\r\n\r\n");
+            foreach (var item in debts)
+            {
+                sb.Append((debts.IndexOf(item) + 1) + "\t" + item.fullName + "\t" + item.lastName+item.lastName + "\t" + item.title + "\t" + item.DateCreation +"\t" + item.Period +  "\r\n");
+            }
+            byte[] data = Encoding.ASCII.GetBytes(sb.ToString());
+
+            string contentType = "text/plain";
+                return File(data, contentType, "users.txt");
+                     }
+ 
+        }
+
 
 
     }

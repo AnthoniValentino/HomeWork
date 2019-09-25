@@ -7,7 +7,8 @@
 
 <div>
     <table class="table">
-        @Html.ActionLink("Выдать книгу", "GiveOutBook", "CustomersWithBooks")
+        @Html.ActionLink("Выдать книгу", "GiveOutBook", "CustomersWithBooks") /
+        @Html.ActionLink("Выгрузить должников", "ExportDebtors", "CustomersWithBooks")
         <tr>
             <th>Имя/Фамилия</th>
             <th>Книга</th>
@@ -26,12 +27,15 @@
                 <th>@item.period</th>
                 <th>@item.returnDate</th>
                 <th>
-                @if (item.returnDate == null)
+                    @if (item.returnDate == null)
                 {
-                    @Html.ActionLink("Редактировать", "GiveOutBook", "CustomersWithBooks", new { id = item.id }, null)
-                    @Html.ActionLink("Вернуть книгу", "ReturnBook", "CustomersWithBooks", new { id = item.id }, null)
-                }
+                        @Html.ActionLink("Редактировать", "GiveOutBook", "CustomersWithBooks", new { id = item.id }, null)
+                        
+                        @Html.ActionLink("Вернуть книгу", "ReturnBook", "CustomersWithBooks", new { id = item.id }, null)
+                    }
                 </th>
+
+
 
             </tr>
         }

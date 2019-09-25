@@ -240,12 +240,11 @@
     <Content Include="Views\Customers\CreateOrEdit.cshtml" />
     <Content Include="Views\CustomersWithBooks\Index.cshtml" />
     <Content Include="Views\CustomersWithBooks\GiveOutBook.cshtml" />
-    <Content Include="Views\Customers\_CustomerFiveBook.cshtml" />
+    <Content Include="Views\Customers\Partial\_CustomerFiveBook.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\Customers\Partial\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
