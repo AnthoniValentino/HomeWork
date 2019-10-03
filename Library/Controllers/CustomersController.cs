@@ -9,16 +9,15 @@ namespace Library.Controllers
 {
     public class CustomersController : Controller
     {
+        UnitOfWork.UnitOfWork<Customers> unitOfWork;
+        public CustomersController()
+        {
+            unitOfWork = new UnitOfWork.UnitOfWork<Customers>();
+        }
         // GET: Customers
         public ActionResult Index()
         {
-            List<Customers> customers;
-            using (Model1 db = new Model1())
-            {
-                customers = db.Customers.ToList();
-            }
-            return View(customers);
-           
+           return View(unitOfWork.UoWRepository.GetAll());
         }
         public ActionResult CreateOrEdit(int? id)
 
@@ -31,33 +30,25 @@ namespace Library.Controllers
             else
             {
                 ViewBag.Title = "Редактирование";
-
-                Customers customer;
-                using (Model1 db = new Model1())
-                {
-                    customer = db.Customers.Where(a => a.id == id).FirstOrDefault();
-                }
-                return View(customer);
+ 
+                return View(unitOfWork.UoWRepository.GetById(id));
             }
 
         }
         [HttpPost]
         public ActionResult CreateOrEdit(Customers customer)
         {
-            using (Model1 db = new Model1())
-            {
-                var editableCustomer = db.Customers.Where(a => a.id == customer.id).FirstOrDefault();
-                if (editableCustomer == null)
+            
+                if (customer.id == 0)
                 {
-                    db.Customers.Add(customer);
+                unitOfWork.UoWRepository.Add(customer);
                 }
                 else
                 {
-                    editableCustomer.fullName = customer.fullName;
-                  
-                }
-                db.SaveChanges();
+                unitOfWork.UoWRepository.Update(customer);
+
             }
+           
             return RedirectToAction("Index", "Customers");
         }
 
@@ -65,12 +56,8 @@ namespace Library.Controllers
         {
             if (id != null)
             {
-                using (Model1 db = new Model1())
-                {
-                    var deleteCustomer = db.Customers.Where(a => a.id == id).FirstOrDefault();
-                    db.Customers.Remove(deleteCustomer);
-                    db.SaveChanges();
-                }
+                unitOfWork.UoWRepository.Delete(id);
+              
             }
             return RedirectToAction("Index", "Customers");
 

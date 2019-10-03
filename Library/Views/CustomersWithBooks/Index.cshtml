@@ -1,4 +1,4 @@
-﻿@model List<Library.Helpers.CustomersWithBooksHelper>
+﻿@model List<Library.Entities.CustomersWithBooks> 
 @{
     ViewBag.Title = "Книги у посетителей";
 }
@@ -21,17 +21,17 @@
         @foreach (var item in Model)
         {
             <tr>
-                <th>@item.customerFullName</th>
-                <th>@item.bookTitle</th>
-                <th>@item.dateCreation</th>
-                <th>@item.period</th>
-                <th>@item.returnDate</th>
+                <th>@item.Customers.fullName</th>
+                <th>@item.Books.title</th>
+                <th>@item.DateCreation</th>
+                <th>@item.Period</th>
+                <th>@item.ReturnDate</th>
                 <th>
-                    @if (item.returnDate == null)
+                    @if (item.ReturnDate == null)
                 {
-                        @Html.ActionLink("Редактировать", "GiveOutBook", "CustomersWithBooks", new { id = item.id }, null)
+                        @Html.ActionLink("Редактировать", "GiveOutBook", "CustomersWithBooks", new { id = item.Id }, new { @class = "btn btn-primary" })
                         
-                        @Html.ActionLink("Вернуть книгу", "ReturnBook", "CustomersWithBooks", new { id = item.id }, null)
+                        @Html.ActionLink("Вернуть книгу", "ReturnBook", "CustomersWithBooks", new { id = item.Id }, new { @class = "btn btn-danger" })
                     }
                 </th>
 

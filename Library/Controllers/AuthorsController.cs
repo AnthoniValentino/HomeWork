@@ -9,14 +9,17 @@ namespace Library.Controllers
 {
     public class AuthorsController : Controller
     {
+
+        UnitOfWork.UnitOfWork<Authors> unitOfWork;
+        public AuthorsController()
+        {
+            unitOfWork = new UnitOfWork.UnitOfWork<Authors>();
+        }
+
         // GET: Authors
         public ActionResult Index()
         {
-            List<Authors> authors;
-            using (Model1 db = new Model1())
-            {
-                authors = db.Authors.ToList();
-            }
+            var authors = unitOfWork.UoWRepository.GetAll();
             return View(authors);
         }
 
@@ -31,33 +34,21 @@ namespace Library.Controllers
             else
             {
                 ViewBag.Title = "Редактирование";
-
-                Authors author;
-                using (Model1 db = new Model1())
-                {
-                    author = db.Authors.Where(a => a.id == id).FirstOrDefault();
-                }
-                return View(author);
+                return View(unitOfWork.UoWRepository.GetById(id));
             }
             
         }
         [HttpPost]
         public ActionResult EditOrCreate(Authors author)
         {
-            using (Model1 db = new Model1())
-            {
-                var editableAuthor = db.Authors.Where(a => a.id == author.id).FirstOrDefault();
-                if (editableAuthor == null)
+                if (author.id == 0)
                 {
-                    db.Authors.Add(author);
+                unitOfWork.UoWRepository.Add(author);
                 }
                 else
                 {
-                    editableAuthor.firstName = author.firstName;
-                    editableAuthor.lastName = author.lastName;
+                unitOfWork.UoWRepository.Update(author);
                 }
-                db.SaveChanges();
-            }
             return RedirectToAction("Index", "Authors");
         }
 
@@ -65,12 +56,7 @@ namespace Library.Controllers
         {
             if (id != null)
             {
-                using (Model1 db = new Model1())
-                {
-                    var deleteAuthor = db.Authors.Where(a => a.id == id).FirstOrDefault();
-                    db.Authors.Remove(deleteAuthor);
-                    db.SaveChanges();
-                }
+                unitOfWork.UoWRepository.Delete(id);
             }
             return RedirectToAction("Index", "Authors");
 

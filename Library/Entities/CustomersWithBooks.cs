@@ -13,12 +13,12 @@ namespace Library.Entities
         [Required]
         [ForeignKey("Customers")]
         public int CustomerId { get; set; }
-        public Customers Customers { get; set; }
+        public virtual Customers Customers { get; set; }
 
         [Required]
         [ForeignKey("Books")]
         public int BookId { get; set; }
-        public Books Books { get; set; }
+        public virtual Books Books { get; set; }
 
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]

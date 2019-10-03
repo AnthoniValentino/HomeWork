@@ -1,4 +1,4 @@
-﻿@model List<Library.Helpers.BooksWithAuthors>
+﻿@model List<Library.Entities.Books>
 @{
     ViewBag.Title = "Книги";
 }
@@ -20,13 +20,13 @@
         @foreach (var item in Model)
         {
             <tr>
-                <th>@item.bookTitle</th>
-                <th>@item.authorLastName @item.authorFirstName</th>
-                <th>@item.bookPages</th>
-                <th>@item.bookPrice</th>
+                <th>@item.title</th>
+                <th>@item.Authors.firstName @item.Authors.lastName</th>
+                <th>@item.pages</th>
+                <th>@item.price</th>
                 <th>
-                    @Html.ActionLink("Редактировать", "CreateOrEdit", "Books", new { id = item.bookId }, null)
-                    @Html.ActionLink("Удалить", "Delete", "Books", new { id = item.bookId }, null)
+                    @Html.ActionLink("Редактировать", "CreateOrEdit", "Books", new { id = item.id }, null)
+                    @Html.ActionLink("Удалить", "Delete", "Books", new { id = item.id }, null)
                 </th>
 
             </tr>
