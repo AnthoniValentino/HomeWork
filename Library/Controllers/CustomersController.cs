@@ -1,4 +1,7 @@
-﻿using Library.Entities;
+﻿using Library.BusinessLayer;
+using Library.BusinessLayer.BusinessObjects;
+using Library.BusinessLayer.Helpers;
+using Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,20 +12,22 @@ namespace Library.Controllers
 {
     public class CustomersController : Controller
     {
-        UnitOfWork.UnitOfWork<Customers> unitOfWork;
-        public CustomersController()
+        ICrud<CustomersBO> customersBO;
+        ICrud<CustomersWithBooksBO> customersWithBooksBO;
+        public CustomersController(ICrud<CustomersBO> customersBO , ICrud<CustomersWithBooksBO> customersWithBooksBO)
         {
-            unitOfWork = new UnitOfWork.UnitOfWork<Customers>();
+            this.customersBO = customersBO;
+            this.customersWithBooksBO = customersWithBooksBO;
         }
         // GET: Customers
         public ActionResult Index()
         {
-           return View(unitOfWork.UoWRepository.GetAll());
+            return View(AutoMapper<IEnumerable<CustomersBO>, List<CustomersViewModel>>.Map(customersBO.GetAll));
         }
-        public ActionResult CreateOrEdit(int? id)
+        public ActionResult CreateOrEdit(int? id = 0)
 
         {
-            if (id == null)
+            if (id == 0)
             {
                 ViewBag.Title = "Создание";
                 return View();
@@ -30,51 +35,31 @@ namespace Library.Controllers
             else
             {
                 ViewBag.Title = "Редактирование";
- 
-                return View(unitOfWork.UoWRepository.GetById(id));
+                return View(AutoMapper<CustomersBO, CustomersViewModel>.Map(customersBO.GetById, (int)id));
             }
 
         }
         [HttpPost]
-        public ActionResult CreateOrEdit(Customers customer)
+        public ActionResult CreateOrEdit(CustomersViewModel customerVM)//Customers customer)
         {
-            
-                if (customer.id == 0)
-                {
-                unitOfWork.UoWRepository.Add(customer);
-                }
-                else
-                {
-                unitOfWork.UoWRepository.Update(customer);
 
-            }
-           
+            CustomersBO oldCustomer = AutoMapper<CustomersViewModel, CustomersBO>.Map(customerVM);
+            customersBO.CreateOrEdit(oldCustomer);
+
             return RedirectToAction("Index", "Customers");
         }
 
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id != null)
-            {
-                unitOfWork.UoWRepository.Delete(id);
-              
-            }
+            customersBO.Delete(id);
             return RedirectToAction("Index", "Customers");
 
         }
 
         public ActionResult GiveFiveBooks(int userId)
         {
-            using (Model1 db = new Model1())
-            {
-
-                ViewBag.FiveBooks = (from cWb in db.CustomersWithBooks
-                                     join b in db.Books on
-                                     cWb.BookId equals b.id
-                                     where cWb.CustomerId == userId
-                                     select  b.title ).Take(5).ToList();
-     }
-        return PartialView("Partial/_CustomerFiveBook", ViewBag.FiveBooks);
+            ViewBag.FiveBooks = customersWithBooksBO.GetAll().Where(i=>i.CustomerId == userId).ToList().Take(5);           
+            return PartialView("Partial/_CustomerFiveBook", ViewBag.FiveBooks);
         }
 
     }

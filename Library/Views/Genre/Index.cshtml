@@ -1,0 +1,30 @@
+﻿@model List<Library.Models.GenreViewModel>
+
+@{
+    ViewBag.Title = "Жанры";
+}
+
+<h2>Жанры</h2>
+
+<div>
+    <table class ="table">
+        @Html.ActionLink("Создать", "EditOrCreate", "Genre")
+        <tr>
+            <th>Наименование жанра</th>
+            <th></th>
+            
+        </tr>
+
+        @foreach (var item in Model) 
+        {
+            <tr>
+                <th>@item.genreName</th>               
+                <th>
+                    @Html.ActionLink("Редактировать", "EditOrCreate", "Genre",new { id = item.id }, new { @class = "btn btn-primary" }) 
+                    @Html.ActionLink("Удалить", "Delete", "Genre", new { id = item.id }, new { @class = "btn btn-danger" })
+                </th>
+               
+            </tr>
+        }
+    </table>
+</div>

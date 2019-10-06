@@ -15,7 +15,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Library</RootNamespace>
     <AssemblyName>Library</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -25,6 +25,7 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +45,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -85,8 +90,25 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Common, Version=3.3.1.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.3.3.1\lib\net45\Ninject.Web.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Common.WebHost, Version=3.3.1.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.Web.Common.WebHost.3.3.1\lib\net45\Ninject.Web.Common.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Ninject.Web.Mvc, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
+      <HintPath>..\packages\Ninject.MVC5.3.3.0\lib\net45\Ninject.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -94,11 +116,8 @@
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
@@ -140,6 +159,11 @@
       <Private>True</Private>
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
@@ -157,49 +181,26 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\Ninject.Web.Common.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\GenreController.cs" />
     <Compile Include="Controllers\AuthorsController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\CustomersWithBooksController.cs" />
-    <Compile Include="Entities\Authors.cs" />
-    <Compile Include="Entities\Books.cs" />
-    <Compile Include="Entities\Customers.cs" />
-    <Compile Include="Entities\CustomersWithBooks.cs" />
-    <Compile Include="Entities\Model1.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\BooksWithAuthors.cs" />
-    <Compile Include="Helpers\CustomersWithBooksHelper.cs" />
+    <Compile Include="Helpers\NinjectHelper.cs" />
     <Compile Include="HTMLHelpers\EditorHelper.cs" />
     <Compile Include="HTMLHelpers\LabelHelper.cs" />
-    <Compile Include="Migrations\201909081337242_BaseMigration.cs" />
-    <Compile Include="Migrations\201909081337242_BaseMigration.Designer.cs">
-      <DependentUpon>201909081337242_BaseMigration.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909081340221_AddCustomersTable.cs" />
-    <Compile Include="Migrations\201909081340221_AddCustomersTable.Designer.cs">
-      <DependentUpon>201909081340221_AddCustomersTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909081417588_AddCustomersWithBooksTable.cs" />
-    <Compile Include="Migrations\201909081417588_AddCustomersWithBooksTable.Designer.cs">
-      <DependentUpon>201909081417588_AddCustomersWithBooksTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201909151634278_EnableNullableDateInCustomersWithBooks2.cs" />
-    <Compile Include="Migrations\201909151634278_EnableNullableDateInCustomersWithBooks2.Designer.cs">
-      <DependentUpon>201909151634278_EnableNullableDateInCustomersWithBooks2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201910031340335_UnitOfWork.cs" />
-    <Compile Include="Migrations\201910031340335_UnitOfWork.Designer.cs">
-      <DependentUpon>201910031340335_UnitOfWork.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\BooksViewModel.cs" />
+    <Compile Include="Models\AuthorsViewModel.cs" />
+    <Compile Include="Models\GenreViewModel.cs" />
+    <Compile Include="Models\CustomersViewModel.cs" />
+    <Compile Include="Models\CustomersWithBooksViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\IRepository.cs" />
-    <Compile Include="Repositories\Repository.cs" />
-    <Compile Include="UnitOfWork\IUnitOfWork.cs" />
-    <Compile Include="UnitOfWork\UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -249,10 +250,11 @@
     <Content Include="Views\CustomersWithBooks\Index.cshtml" />
     <Content Include="Views\CustomersWithBooks\GiveOutBook.cshtml" />
     <Content Include="Views\Customers\Partial\_CustomerFiveBook.cshtml" />
+    <Content Include="Views\Genre\EditOrCreate.cshtml" />
+    <Content Include="Views\Genre\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -263,21 +265,10 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201909081337242_BaseMigration.resx">
-      <DependentUpon>201909081337242_BaseMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909081340221_AddCustomersTable.resx">
-      <DependentUpon>201909081340221_AddCustomersTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909081417588_AddCustomersWithBooksTable.resx">
-      <DependentUpon>201909081417588_AddCustomersWithBooksTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201909151634278_EnableNullableDateInCustomersWithBooks2.resx">
-      <DependentUpon>201909151634278_EnableNullableDateInCustomersWithBooks2.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201910031340335_UnitOfWork.resx">
-      <DependentUpon>201910031340335_UnitOfWork.cs</DependentUpon>
-    </EmbeddedResource>
+    <ProjectReference Include="..\Library.BusinessLayer\Library.BusinessLayer.csproj">
+      <Project>{c6ef2c9c-cc2b-4c1e-9d52-38acab1fd5ff}</Project>
+      <Name>Library.BusinessLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

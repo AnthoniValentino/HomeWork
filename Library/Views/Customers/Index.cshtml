@@ -1,4 +1,4 @@
-﻿@model List<Library.Entities.Customers>
+﻿@model List<Library.Models.CustomersViewModel>
 
 @{
     ViewBag.Title = "Посетители";
@@ -23,8 +23,8 @@
                     <th>@item.fullName</th>
 
                     <th>
-                        @Html.ActionLink("Редактировать", "CreateOrEdit", "Customers", new { id = item.id }, null)
-                        @Html.ActionLink("Удалить", "Delete", "Customers", new { id = item.id }, null)
+                        @Html.ActionLink("Редактировать", "CreateOrEdit", "Customers", new { id = item.id }, new { @class = "btn btn-primary" })
+                        @Html.ActionLink("Удалить", "Delete", "Customers", new { id = item.id }, new { @class = "btn btn-danger" })
                     </th>
 
                 </tr>

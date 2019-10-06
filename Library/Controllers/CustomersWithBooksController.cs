@@ -1,4 +1,5 @@
-﻿using Library.Entities;
+﻿using Library.BusinessLayer;
+using Library.BusinessLayer.BusinessObjects;
 using Library.Helpers;
 using System;
 using System.Collections.Generic;
@@ -7,107 +8,103 @@ using System.Web;
 using System.Web.Mvc;
 using System.IO;
 using System.Text;
+using Library.BusinessLayer.Helpers;
+using Library.Models;
 
 namespace Library.Controllers
 {
     public class CustomersWithBooksController : Controller
     {
-        UnitOfWork.UnitOfWork<CustomersWithBooks> unitOfWork;
-        public CustomersWithBooksController()
+        ICrud<CustomersWithBooksBO> customersWithBooksBO;
+        ICrud<CustomersBO> customersBO;
+        ICrud<BooksBO> booksBO;
+        public CustomersWithBooksController(ICrud<CustomersWithBooksBO> customersWithBooksBO, ICrud<CustomersBO> customersBO, ICrud<BooksBO> booksBO)
         {
-            unitOfWork = new UnitOfWork.UnitOfWork<CustomersWithBooks>();
+            this.customersWithBooksBO = customersWithBooksBO;
+            this.customersBO = customersBO;
+            this.booksBO = booksBO;
         }
         // GET: CustomersWithBooks
         public ActionResult Index()
         {
-           return View(unitOfWork.UoWRepository.GetAll());
+            List<CustomersWithBooksViewModel> customersWithBooks = AutoMapper<IEnumerable<CustomersWithBooksBO>, List<CustomersWithBooksViewModel>>.Map(customersWithBooksBO.GetAll).OrderBy(x => x.DateCreation).ToList();
+            return View(customersWithBooks);
         }
 
-        public ActionResult GiveOutBook(int? id)
+        public ActionResult GiveOutBook(int id = 0)
         {
 
-                ViewBag.BooksList = new SelectList(new UnitOfWork.UnitOfWork<Books>().UoWRepository.GetAll(), "id", "title");
-                ViewBag.CustomersList = new SelectList(new UnitOfWork.UnitOfWork<Customers>().UoWRepository.GetAll(), "id", "fullName");
-          
-            if (id == null)
+           ViewBag.BooksList = new SelectList(AutoMapper<IEnumerable<BooksBO>, List<BooksViewModel>>.Map(booksBO.GetAll), "id", "title");
+           ViewBag.CustomersList = new SelectList(AutoMapper<IEnumerable<CustomersBO>, List<CustomersViewModel>>.Map(customersBO.GetAll), "id", "fullName");
+
+            if (id == 0)
             {
-                    ViewBag.Title = "Выдать книгу";
-                    ViewBag.DateCreation = DateTime.Now.ToString("yyyy-MM-dd");
-                    ViewBag.Period = DateTime.Now.AddDays(10).ToString("yyyy-MM-dd");
-                    ViewBag.Btn = "Выдать";
-                    return View();
+                ViewBag.Title = "Выдать книгу";
+                ViewBag.DateCreation = DateTime.Now.ToString("yyyy-MM-dd");
+                ViewBag.Period = DateTime.Now.AddDays(10).ToString("yyyy-MM-dd");
+                ViewBag.Btn = "Выдать";
+                return View();
             }
             else
             {
-                var customerWithBooks = unitOfWork.UoWRepository.GetById(id);
-                    ViewBag.Title = "Редактировать заказ";
-                    ViewBag.DateCreation = customerWithBooks.DateCreation.ToString("yyyy-MM-dd");
-                    ViewBag.Period = customerWithBooks.Period.ToString("yyyy-MM-dd");
-                    ViewBag.Btn = "Редактировать";
-                    return View(customerWithBooks);
-            
+                var customerWithBooks = AutoMapper<CustomersWithBooksBO, CustomersWithBooksViewModel>.Map(customersWithBooksBO.GetById, (int)id);
+                ViewBag.Title = "Редактировать заказ";
+                ViewBag.DateCreation = customerWithBooks.DateCreation.ToString("yyyy-MM-dd");
+                ViewBag.Period = customerWithBooks.Period.ToString("yyyy-MM-dd");
+                ViewBag.Btn = "Редактировать";
+                return View(customerWithBooks);
+
             }
         }
 
         [HttpPost]
-        public ActionResult GiveOutBook(CustomersWithBooks customerWithBook)
+        public ActionResult GiveOutBook(CustomersWithBooksViewModel customerWithBooksVM)
         {
-            if (customerWithBook.Id == 0)
+            if (customerWithBooksVM.Id == 0)
             {
-                var customersWithBooks = new UnitOfWork.UnitOfWork<CustomersWithBooks>().UoWRepository.GetAll();
+                var customersWithBooks = customersWithBooksBO.GetAll();
                 int debtCount = 0;
-                foreach (var customerWBook in customersWithBooks)
-                 {
-                     if (customerWBook.CustomerId == customerWithBook.CustomerId && customerWBook.Period < DateTime.Now)
-                     debtCount += 1;
-                 }
-           
+                foreach (var customerWithBook in customersWithBooks)
+                {
+                    if (customerWithBook.CustomerId == customerWithBooksVM.CustomerId && customerWithBook.Period < DateTime.Now)
+                        debtCount += 1;
+                }
+
                 if (debtCount != 0)
                 {
                     ModelState.AddModelError("CustomerId", "У пользователя есть просроченные книги, выдача отменена");
-                    int? id = null;
-                    return GiveOutBook(id);
+                    return GiveOutBook(customerWithBooksVM.Id);
                 }
-                 unitOfWork.UoWRepository.Add(customerWithBook);
+                CustomersWithBooksBO oldCustomerWithBook = AutoMapper<CustomersWithBooksViewModel, CustomersWithBooksBO>.Map(customerWithBooksVM);
+                customersWithBooksBO.CreateOrEdit(oldCustomerWithBook);
+               
             }
             else
             {
-                unitOfWork.UoWRepository.Update(customerWithBook);
-
+                CustomersWithBooksBO oldCustomerWithBook = AutoMapper<CustomersWithBooksViewModel, CustomersWithBooksBO>.Map(customerWithBooksVM);
+                customersWithBooksBO.CreateOrEdit(oldCustomerWithBook);
             }
-  
+
             return RedirectToAction("Index", "CustomersWithBooks");
         }
 
         public ActionResult ReturnBook(int id)
         {
-            var returnedBook = unitOfWork.UoWRepository.GetById(id);
-            returnedBook.ReturnDate = DateTime.Now;
-            unitOfWork.UoWRepository.Save();
+            customersWithBooksBO.Delete(id);
             return RedirectToAction("Index", "CustomersWithBooks");
         }
 
         public ActionResult ExportDebtors()
         {
-            using (Model1 db = new Model1())
-            {
-                var debts = (from cWb in db.CustomersWithBooks
-                             join c in db.Customers on
-                             cWb.CustomerId equals c.id
-                             join b in db.Books on
-                             cWb.BookId equals b.id
-                             join a in db.Authors on
-                             b.authorId equals a.id
-                             where cWb.Period < DateTime.Now && cWb.ReturnDate == null
-                             select new { c.fullName, b.title, a.firstName, a.lastName, cWb.DateCreation, cWb.Period }).ToList();
-           
+            List<CustomersWithBooksBO> debts = customersWithBooksBO.GetAll().Where(i => i.Period < DateTime.Now).ToList();
+
 
             StringBuilder sb = new StringBuilder();
-            string header = "\tUser\t|\tAuthor\t|\tBook\t|\tIssued\t|\tReturn date\t|\r\n";
+            string header = "\tUser\t|\tBook\t|\tIssued\t|\tReturn date\t|\r\n";
             sb.Append(header);
-           foreach (var item in debts)
+            foreach (var item in debts)
             {
-                sb.Append("\t" + item.fullName + "\t|\t" + item.lastName+item.lastName + "\t|\t" + item.title + "\t|\t" + item.DateCreation.ToString("dd/MM/yyyy") + "\t|\t" + item.Period.ToString("dd/MM/yyyy") +  "\t|\r\n");
+                sb.Append("\t" + item.CustomerName  + "\t|\t" + item.BookTitle + "\t|\t" + item.DateCreation.ToString("dd/MM/yyyy") + "\t|\t" + item.Period.ToString("dd/MM/yyyy") + "\t|\r\n");
             }
             byte[] data = Encoding.ASCII.GetBytes(sb.ToString());
             return File(data, "text/plain", "users.txt");
@@ -118,4 +115,3 @@ namespace Library.Controllers
 
 
     }
-}

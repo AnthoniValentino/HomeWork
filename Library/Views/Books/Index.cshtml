@@ -1,4 +1,4 @@
-﻿@model List<Library.Entities.Books>
+﻿@model List<Library.Models.BooksViewModel>
 @{
     ViewBag.Title = "Книги";
 }
@@ -9,9 +9,11 @@
     <table class="table">
         @Html.ActionLink("Создать", "CreateOrEdit", "Books")
         <tr>
+            <th><th>
             <th>Наименование</th>
             <th>Автор</th>
             <th>Кол-во страниц</th>
+            <th>Жанр</th>
             <th>Стоимость</th>
             <th></th>
 
@@ -19,14 +21,19 @@
 
         @foreach (var item in Model)
         {
+
+
+            
             <tr>
+                <th><img src="data:image;base64,@System.Convert.ToBase64String(@item.BookCover)" width="80" height="80" />    </th>
                 <th>@item.title</th>
-                <th>@item.Authors.firstName @item.Authors.lastName</th>
+                <th>@item.AuthorName</th>
                 <th>@item.pages</th>
+                <th>@item.GenreName</th>
                 <th>@item.price</th>
                 <th>
-                    @Html.ActionLink("Редактировать", "CreateOrEdit", "Books", new { id = item.id }, null)
-                    @Html.ActionLink("Удалить", "Delete", "Books", new { id = item.id }, null)
+                    @Html.ActionLink("Редактировать", "CreateOrEdit", "Books", new { id = item.id }, new { @class = "btn btn-primary" })
+                    @Html.ActionLink("Удалить", "Delete", "Books", new { id = item.id }, new { @class = "btn btn-danger" })
                 </th>
 
             </tr>

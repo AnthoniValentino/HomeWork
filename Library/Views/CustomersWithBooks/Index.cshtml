@@ -1,4 +1,4 @@
-﻿@model List<Library.Entities.CustomersWithBooks> 
+﻿@model List<Library.Models.CustomersWithBooksViewModel> 
 @{
     ViewBag.Title = "Книги у посетителей";
 }
@@ -21,8 +21,8 @@
         @foreach (var item in Model)
         {
             <tr>
-                <th>@item.Customers.fullName</th>
-                <th>@item.Books.title</th>
+                <th>@item.CustomerName</th>
+                <th>@item.BookTitle</th>
                 <th>@item.DateCreation</th>
                 <th>@item.Period</th>
                 <th>@item.ReturnDate</th>

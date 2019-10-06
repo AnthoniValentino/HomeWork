@@ -1,4 +1,4 @@
-﻿@model List<Library.Entities.Authors>
+﻿@model List<Library.Models.AuthorsViewModel>
 
 @{
     ViewBag.Title = "Авторы";
@@ -22,8 +22,8 @@
                 <th>@item.firstName</th>
                 <th>@item.lastName</th>
                 <th>
-                    @Html.ActionLink("Редактировать", "EditOrCreate", "Authors",new { id = item.id }, null) 
-                    @Html.ActionLink("Удалить", "Delete", "Authors", new { id = item.id }, null)
+                    @Html.ActionLink("Редактировать", "EditOrCreate", "Authors",new { id = item.id }, new { @class = "btn btn-primary" }) 
+                    @Html.ActionLink("Удалить", "Delete", "Authors", new { id = item.id }, new { @class = "btn btn-danger" })
                 </th>
                
             </tr>

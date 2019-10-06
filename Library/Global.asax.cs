@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Library.BusinessLayer.Helpers;
+using Library.Helpers;
+using Ninject;
+using Ninject.Modules;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,6 +20,13 @@ namespace Library
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            //Ninject
+            NinjectModule ninjectBO = new NinjectUnitOfWork("Model1");
+            NinjectModule ninjectWeb = new NinjectHelper();
+
+            var kernel = new StandardKernel(ninjectWeb, ninjectBO);
+            DependencyResolver.SetResolver(new Ninject.Web.Mvc.NinjectDependencyResolver(kernel));
         }
     }
 }

@@ -1,7 +1,11 @@
-﻿using Library.Entities;
+﻿using Library.BusinessLayer;
+using Library.BusinessLayer.BusinessObjects;
+using Library.BusinessLayer.Helpers;
 using Library.Helpers;
+using Library.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -10,57 +14,64 @@ namespace Library.Controllers
 {
     public class BooksController : Controller
     {
-        UnitOfWork.UnitOfWork<Books> unitOfWork;
-        public BooksController()
+        ICrud<BooksBO> booksBO;
+        ICrud<AuthorsBO> authorsBO;
+        ICrud<GenreBO> genreBO;
+        public BooksController(ICrud<BooksBO> booksBO, ICrud<AuthorsBO> authorsBO, ICrud<GenreBO> genreBO)
         {
-            unitOfWork = new UnitOfWork.UnitOfWork<Books>();
+
+            this.booksBO = booksBO;
+            this.authorsBO = authorsBO;
+            this.genreBO = genreBO;
         }
-
-
         // GET: Books
         public ActionResult Index()
         {
-           return View(unitOfWork.UoWRepository.GetAll());
+            List<BooksViewModel> books = AutoMapper<IEnumerable<BooksBO>, List<BooksViewModel>>.Map(booksBO.GetAll);
+            return View(books);
         }
 
-        public ActionResult CreateOrEdit(int? id)
-        {
-           
-            ViewBag.AuthorList = new SelectList( new UnitOfWork.UnitOfWork<Authors>().UoWRepository.GetAll(), "id", "firstName", "lastName");
-            if (id == null)
-                {
-                    ViewBag.Title = "Создание";
-                    return View();
-                }
-                else
-                {
-                    ViewBag.Title = "Редактирование";
-                    return View(unitOfWork.UoWRepository.GetById(id));
-                }
 
-            
+        public ActionResult CreateOrEdit(int id = 0)
+        {
+            ViewBag.AuthorList = new SelectList(AutoMapper<IEnumerable<AuthorsBO>, List<AuthorsViewModel>>.Map(authorsBO.GetAll), "Id", "FirstName");
+            ViewBag.GenreList = new SelectList(AutoMapper<IEnumerable<GenreBO>, List<GenreViewModel>>.Map(genreBO.GetAll), "id", "genreName");
+
+            if (id == 0)
+            {
+                ViewBag.Title = "Создание";
+                
+                return View();
+            }
+            else
+            {
+                ViewBag.Title = "Редактирование";
+                return View(AutoMapper<BooksBO, BooksViewModel>.Map(booksBO.GetById, (int)id));
+            }
         }
 
         [HttpPost]
-        public ActionResult CreateOrEdit(Books book)
+        public ActionResult CreateOrEdit(BooksViewModel bookVM)
         {
-                if (book.id == 0)
+            if (Request.Files.Count > 0)
+            {
+                HttpPostedFileBase file = Request.Files[0];
+                var length = file.InputStream.Length;
+                if (length != 0)
                 {
-                    unitOfWork.UoWRepository.Add(book);
+                    MemoryStream target = new MemoryStream();
+                    file.InputStream.CopyTo(target);
+                    bookVM.BookCover = target.ToArray();
                 }
-                else
-                {
-                    unitOfWork.UoWRepository.Update(book);
-                }
+            }
+                BooksBO oldBook = AutoMapper<BooksViewModel, BooksBO>.Map(bookVM);
+            booksBO.CreateOrEdit(oldBook);
             return RedirectToAction("Index", "Books");
         }
 
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id != null)
-            {
-                unitOfWork.UoWRepository.Delete(id);
-            }
+            booksBO.Delete(id);
             return RedirectToAction("Index", "Books");
 
         }

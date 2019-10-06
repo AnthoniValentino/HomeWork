@@ -1,4 +1,7 @@
-﻿using Library.Entities;
+﻿using Library.BusinessLayer;
+using Library.BusinessLayer.BusinessObjects;
+using Library.BusinessLayer.Helpers;
+using Library.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +12,26 @@ namespace Library.Controllers
 {
     public class AuthorsController : Controller
     {
-
-        UnitOfWork.UnitOfWork<Authors> unitOfWork;
-        public AuthorsController()
+        ICrud<AuthorsBO> authorsBO;
+       
+        public AuthorsController(ICrud<AuthorsBO> authorsBO)
         {
-            unitOfWork = new UnitOfWork.UnitOfWork<Authors>();
+            
+            this.authorsBO = authorsBO;
         }
 
         // GET: Authors
         public ActionResult Index()
         {
-            var authors = unitOfWork.UoWRepository.GetAll();
-            return View(authors);
+            
+            return View(AutoMapper<IEnumerable<AuthorsBO>, List<AuthorsViewModel>>.Map(authorsBO.GetAll));
+           
         }
 
-        public ActionResult EditOrCreate(int? id)
+        public ActionResult EditOrCreate(int? id = 0)
 
         {
-            if (id == null)
+            if (id == 0)
             {
                 ViewBag.Title = "Создание";
                 return View();
@@ -34,30 +39,21 @@ namespace Library.Controllers
             else
             {
                 ViewBag.Title = "Редактирование";
-                return View(unitOfWork.UoWRepository.GetById(id));
+                return View(AutoMapper<AuthorsBO, AuthorsViewModel>.Map(authorsBO.GetById, (int) id));
             }
             
         }
         [HttpPost]
-        public ActionResult EditOrCreate(Authors author)
+        public ActionResult EditOrCreate(AuthorsViewModel authorVM)//Authors author)
         {
-                if (author.id == 0)
-                {
-                unitOfWork.UoWRepository.Add(author);
-                }
-                else
-                {
-                unitOfWork.UoWRepository.Update(author);
-                }
+            AuthorsBO oldAuthor = AutoMapper<AuthorsViewModel, AuthorsBO>.Map(authorVM);
+            authorsBO.CreateOrEdit(oldAuthor);
             return RedirectToAction("Index", "Authors");
         }
 
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id != null)
-            {
-                unitOfWork.UoWRepository.Delete(id);
-            }
+            authorsBO.Delete(id);
             return RedirectToAction("Index", "Authors");
 
         }
