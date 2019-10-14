@@ -75,5 +75,12 @@ namespace Library.Controllers
             return RedirectToAction("Index", "Books");
 
         }
+
+        public JsonResult GetBooksGenres()
+        {
+          var genresList =  AutoMapper<IEnumerable<GenreBO>, List<GenreViewModel>>.Map(genreBO.GetAll);
+
+            return Json (genresList, JsonRequestBehavior.AllowGet);
+        }
     }
 }

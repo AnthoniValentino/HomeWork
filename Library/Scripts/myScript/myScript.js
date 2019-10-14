@@ -6,7 +6,5 @@ function GetFiveBooks(userId) {
     }).done(function (partial) {
         $('#fiveBooks').html(partial)
     });
-
-   
-
-}  
+}
+  

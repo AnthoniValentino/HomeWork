@@ -6,37 +6,37 @@
 <h2>Книги</h2>
 
 <div>
-    <table class="table">
+    <table class="table" >
         @Html.ActionLink("Создать", "CreateOrEdit", "Books")
-        <tr>
-            <th><th>
-            <th>Наименование</th>
-            <th>Автор</th>
-            <th>Кол-во страниц</th>
-            <th>Жанр</th>
-            <th>Стоимость</th>
-            <th></th>
-
-        </tr>
+    
+            <tr>
+                <th>Обложка<th>
+                <th>Наименование</th>
+                <th>Автор</th>
+                <th>Кол-во страниц</th>
+                <th>Жанр</th>
+                <th>Стоимость</th>
+                <th>Функции</th>
+            </tr>
+     
 
         @foreach (var item in Model)
         {
-
-
-            
             <tr>
-                <th><img src="data:image;base64,@System.Convert.ToBase64String(@item.BookCover)" width="80" height="80" />    </th>
-                <th>@item.title</th>
-                <th>@item.AuthorName</th>
-                <th>@item.pages</th>
-                <th>@item.GenreName</th>
-                <th>@item.price</th>
-                <th>
+                <td><img src="data:image;base64,@System.Convert.ToBase64String(@item.BookCover)" width="80" height="80" /></td>
+                <td></td>
+                <td>@item.title</td>
+                <td>@item.AuthorName</td>
+                <td>@item.pages</td>
+                <td>@item.GenreName</td>
+                <td>@item.price</td>
+                <td>
                     @Html.ActionLink("Редактировать", "CreateOrEdit", "Books", new { id = item.id }, new { @class = "btn btn-primary" })
                     @Html.ActionLink("Удалить", "Delete", "Books", new { id = item.id }, new { @class = "btn btn-danger" })
-                </th>
+                </td>
 
             </tr>
         }
     </table>
+
 </div>

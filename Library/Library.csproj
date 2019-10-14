@@ -226,6 +226,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Content\myStyle\myStyle.css" />
+    <Content Include="Scripts\myScript\myScript_GetGenres.js" />
     <Content Include="Scripts\myScript\myScript.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
